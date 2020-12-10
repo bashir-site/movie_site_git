@@ -33,13 +33,17 @@
                     <li style="list-style: none">
                                     <span><b>Режиссер:</b>
                                         {% for director in movie.directors.all %}
-                                            {{ director.name }}
+                                            <a href="{{director.get_absolute_url}}">
+                                                    {{ director.name }}
+                                            </a>
                                         {% endfor %}
                                     </span>
                     </li>
                     <li style="list-style: none"><span><b>Актеры:</b>
                         {% for actor in movie.actors.all %}
-                            {{ actor.name }}
+                            <a href="{{ actor.get_absolute_url }}">
+                                    {{ actor.name }}
+                            </a>
                         {% endfor %}
                                 </span>
                     </li>
@@ -142,7 +146,7 @@
                                     <span class="sub-tittle editContent" >{{ movie.reviews_set.count }}</span>Оставить отзыв</h3>
                     <form action="{% url 'add_review' movie.id %}" method="post" class="mt-4" id="formReview">
                         {% csrf_token %}
-                        <input type="hidden" name="parrent" id="contactparent" value="">
+                        <input type="hidden" name="parent" id="contactparent" value="">
                         <div class="form-group editContent">
                             <label for="contactcomment" class="editContent">
                                 Ваш комментарий *
@@ -175,6 +179,7 @@
 
             </div>
         </div>
+
         {% for review in movie.get_review %}
             <div class="media py-5">
                 <img src="{% static 'movies/images/th.png' %}" class="mr-3 img-fluidd" alt="image">
@@ -189,7 +194,7 @@
                        onclick="addReview('{{ review.name }}', '{{ review.id }}')">Ответить</a>
                     {% for rew in review.reviews_set.all %}
                         <div class="media mt-5 editContent">
-                            <a class="pr-3" href="#">
+                            <a class="pr-3 img-fluidd" href="#">
                                 <img src="{% static 'movies/images/ansel_elgort.png' %}" class="img-fluid "
                                      alt="image">
                             </a>

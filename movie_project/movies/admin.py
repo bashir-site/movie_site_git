@@ -5,21 +5,26 @@ from .models import Category, Genre, Movie, MovieShots, Actor, Rating, RatingSta
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
+
 class MovieAdminForm(forms.ModelForm):
     description = forms.CharField(label="Описание", widget=CKEditorUploadingWidget())
+
     class Meta:
         model = Movie
         fields = '__all__'
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "url")
     list_display_links = ("name",)
 
+
 class ReviewInline(admin.TabularInline):
     model = Reviews
-    extra = 1
+    extra = 0
     readonly_fields = ("name", "email")
+
 
 class MovieShotsInline(admin.TabularInline):
     model = MovieShots
@@ -30,6 +35,7 @@ class MovieShotsInline(admin.TabularInline):
         return mark_safe(f'<img src={obj.image.url} width="120px" height="70"')
 
     get_image.short_description = "Изображение"
+
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
@@ -44,11 +50,11 @@ class MovieAdmin(admin.ModelAdmin):
     form = MovieAdminForm
     readonly_fields = ("get_image",)
     fieldsets = (
-        # (None, {
-        #     "fields": (("title", "tagline"),)
-        # }),
         (None, {
-            "fields": ("description", ("poster", "get_image"))
+            "fields": (("title", "tag_line"),)
+        }),
+        (None, {
+            "fields": ("description", ("poster", "get_image"),)
         }),
         (None, {
             "fields": (("year", "world_premiere", "country"),)
@@ -65,9 +71,6 @@ class MovieAdmin(admin.ModelAdmin):
         }),
     )
 
-    def get_image(self, obj):
-        return mark_safe(f'<img src={obj.poster.url} width="100" height="110"')
-
     def unpublish(self, request, queryset):
         """Снять с публикации"""
         row_update = queryset.update(draft=True)
@@ -82,6 +85,8 @@ class MovieAdmin(admin.ModelAdmin):
         row_update = queryset.update(draft=False)
         if row_update == 1:
             message_bit = "1 запись была обновлена"
+        elif row_update < 5:
+            message_bit = f"{row_update} записи были обновлены"
         else:
             message_bit = f"{row_update} записей были обновлены"
         self.message_user(request, f"{message_bit}")
@@ -92,21 +97,22 @@ class MovieAdmin(admin.ModelAdmin):
     unpublish.short_description = "Снять с публикации"
     unpublish.allowed_permissions = ('change',)
 
-    get_image.short_description = "Постер"
-
     def get_image(self, obj):
         return mark_safe(f'<img src={obj.poster.url} width="120px" height="130"')
 
     get_image.short_description = "Постер"
+
 
 @admin.register(Reviews)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "parent", "movie", "id")
     readonly_fields = ("name", "email")
 
+
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
     list_display = ("name", "url")
+
 
 @admin.register(Actor)
 class ActorAdmin(admin.ModelAdmin):
@@ -115,7 +121,7 @@ class ActorAdmin(admin.ModelAdmin):
 
     def get_image(self, obj):
         return mark_safe(f'<img src={obj.image.url} width="70px" height="70"')
-    get_image.short_description = "Изображение"
+    get_image.short_description = "Превью"
 
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):

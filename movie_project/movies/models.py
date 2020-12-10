@@ -17,6 +17,7 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+
 class Actor(models.Model):
     name = models.CharField('Имя', max_length=100)
     age = models.PositiveSmallIntegerField('Возраст', default=0)
@@ -26,9 +27,13 @@ class Actor(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('actor_detail', kwargs={"slug": self.name})
+
     class Meta:
         verbose_name = 'Актеры и режисеры'
         verbose_name_plural = 'Актеры и режисеры'
+
 
 class Genre(models.Model):
     name = models.CharField('Имя', max_length=100)
@@ -41,6 +46,7 @@ class Genre(models.Model):
     class Meta:
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
+
 
 class Movie(models.Model):
     title = models.CharField('Название', max_length=100)
@@ -79,6 +85,7 @@ class Movie(models.Model):
         verbose_name = 'Фильм'
         verbose_name_plural = 'Фильмы'
 
+
 class MovieShots(models.Model):
     title = models.CharField('Описание', max_length=100)
     description = models.TextField('Описание')
@@ -92,6 +99,7 @@ class MovieShots(models.Model):
         verbose_name = 'Кадр из фильма'
         verbose_name_plural = 'Кадры из фильма'
 
+
 class RatingStar(models.Model):
     value = models.SmallIntegerField('Значение', default=0)
 
@@ -101,6 +109,7 @@ class RatingStar(models.Model):
     class Meta:
         verbose_name = 'Звезда рейтинга'
         verbose_name_plural = 'Звезды рейтинга'
+
 
 class Rating(models.Model):
     ip = models.CharField('', max_length=15)
@@ -113,6 +122,7 @@ class Rating(models.Model):
     class Meta:
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинги'
+
 
 class Reviews(models.Model):
     email = models.EmailField()
