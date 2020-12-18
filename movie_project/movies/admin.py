@@ -122,10 +122,13 @@ class ActorAdmin(admin.ModelAdmin):
     def get_image(self, obj):
         return mark_safe(f'<img src={obj.image.url} width="70px" height="70"')
     get_image.short_description = "Превью"
+  
 
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
-    list_display = ("movie", "ip")
+    """Рейтинг"""
+    list_display = ("star", "movie", "ip")
+
 
 @admin.register(MovieShots)
 class MovieShotsAdmin(admin.ModelAdmin):
