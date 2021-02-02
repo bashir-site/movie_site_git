@@ -68,6 +68,8 @@ class FilterMoviesView(GenreYear, ListView):
         context["genre"] = ''.join([f"genre={x}&" for x in self.request.GET.getlist("genre") ])
         return context
 
+class FilterCategorysView():
+    pass
 
 class JsonFilterMoviesView(ListView):
     """Фильтр фильмов в json"""

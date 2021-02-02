@@ -12,13 +12,11 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-	path('accounts/', include('allauth.urls')),
-	path('pages/', include('django.contrib.flatpages.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('pages/', include('django.contrib.flatpages.urls')),
     path('contact', include('contact.urls')),
     path('', include('movies.urls')),
 )
-
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
